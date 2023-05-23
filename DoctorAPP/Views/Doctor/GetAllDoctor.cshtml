@@ -1,0 +1,157 @@
+﻿@model IEnumerable<Doctor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section Styles{
+    <link href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.21.4/extensions/filter-control/utils.min.js"></script>
+
+}
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: rgb(124,185,232);
+            background: linear-gradient(90deg, rgba(124,185,232,1) 0%, rgba(0,39,86,1) 100%);
+            background: rgb(124,185,232);
+            background: linear-gradient(90deg, rgba(124,185,232,1) 0%, rgba(0,39,86,1) 100%);
+        }
+
+        .card {
+            padding: 35px;
+            border: 0px solid lightgray;
+            border-radius: 20px;
+            box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
+            /*--Addition--*/
+            margin: 0 auto;
+            margin-top: 45px;
+            margin-bottom: 45px;
+            position: relative;
+            top: 50%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="card">
+        <div>
+            @if (ViewBag.SuccessMessage != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @ViewBag.SuccessMessage
+
+                </div>
+            }
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger  alert-dismissible fade show" role="alert">
+                    @ViewBag.ErrorMessage
+
+                </div>
+            }
+
+            <center><h1 style="font-weight: bold; font-family: Poppins; color:#002756">List of Doctors</h1></center>
+            <hr />
+            <p style="color: gray">Doctor > Index</p>
+            <br />
+            @*<p></a>int Count</p>*@
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a button class="btn btn-primary bg-blue" type="button" asp-controller="Doctor" asp-action="Create">+ New Doctor</a>
+            </div>
+            <br />
+        </div>
+
+
+        <div style=" border: 2px solid lightgray;
+    border-radius: 20px; padding: 35px;">
+            <table id="table" class="table"
+                   data-toggle="table"
+                   data-search="true"
+                   data-search-align="left"
+                   data-filter-control="true"
+                   data-buttons-class="primary"
+                   data-buttons-align="left"
+                   data-toolbar="#toolbar"
+            @*For which column show*@
+                   data-show-columns="true"
+                   data-minimum-count-columns="2"
+            @*pagination function*@
+                   data-pagination="true"
+                   data-show-pagination-switch="true"
+                   data-page-list="[10, 25, 50, 100, all]">
+
+                <thead>
+                    <tr>
+                        <th data-field="column1" data-halign="center" data-align="center" data-sortable="true">ID</th>
+                        <th data-field="column2" data-halign="center" data-align="center" data-sortable="true">First Name</th>
+                        <th data-field="column3" data-halign="center" data-align="center" data-sortable="true">Last Name</th>
+                        <th data-field="column4" data-halign="center" data-align="center" data-sortable="true">Specialization</th>
+                        <th data-field="column5" data-halign="center" data-align="center" data-sortable="true">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("Edit", "Doctor", new { id = item.DoctorId })">@item.DoctorId</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Specialization)
+                            </td>
+                            <td>
+                                <div class="d-grid gap-2">      
+                                    <div>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteDoctor-@item.DoctorId" asp-route-id="@item.DoctorId">
+                                            <i class="bi bi-person-x-fill"></i>     Delete
+                                        </button>
+                                        <div class="modal fade" id="deleteDoctor-@item.DoctorId" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div style="color:black" class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" style="font-weight:bold;">Delete Confirmation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <p style="color:black">Are you sure you want to delete the profile of @item.FirstName @item.LastName?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <a class="btn btn-danger" role="button" asp-action="Delete" asp-route-id="@item.DoctorId">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </header>
+
+</body>
+
+<script>
+    $(function () {
+        $('#table').bootstrapTable()
+    })
+</script>

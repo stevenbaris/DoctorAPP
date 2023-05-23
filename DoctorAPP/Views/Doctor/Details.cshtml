@@ -1,0 +1,30 @@
+﻿@model Doctor
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="background-overlay"></div>
+<h5>Doctor Details</h5>
+<hr />
+<div class="card" style="width: 18rem;">
+    <div class="card-header">
+        <label class="control-label">ID</label>
+        <div class="d-flex justify-content-between p-0">
+            <div style="font-weight:bold">
+                @Html.DisplayFor(model => model.DoctorId)
+            </div>
+            <div class="d-flex justify-content-end p-0">     
+                <a class="btn btn-light btn-sm" asp-action="Edit" asp-route-id="@Model?.DoctorId"><span><i class="bi bi-pencil-square"></i></span></a>&nbsp
+                <a class="btn btn-light btn-sm" asp-action="GetAllDoctor"><span><i class="bi bi-house"></i></span></a>
+            </div>
+        </div>
+    </div>
+    <ul class="list-group list-group-flush">
+        <label class="control-label">First Name</label>
+        <li class="list-group-item">@Html.DisplayFor(model => model.FirstName)</li>
+        <label class="control-label">Last Name</label>
+        <li class="list-group-item">@Html.DisplayFor(model => model.LastName)</li>
+        <label class="control-label">Specialization</label>
+        <li class="list-group-item">@Html.DisplayFor(model => model.Specialization)</li>
+    </ul>
+</div>
